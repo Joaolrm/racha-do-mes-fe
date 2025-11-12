@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { apiService, type MonthlyBill } from "../services/api";
-import { MonthSelector } from "./MonthSelector";
+import { MonthSelector } from "../components/MonthSelector";
 import "./Home.css";
 
 export function Home() {
@@ -152,3 +152,4 @@ export function Home() {
     </div>
   );
 }
+
