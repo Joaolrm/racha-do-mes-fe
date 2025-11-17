@@ -10,7 +10,7 @@
 }
 
 .month-nav-button {
-  background: #667eea;
+  background: #1f2937;
   color: white;
   border: none;
   width: 40px;
@@ -25,7 +25,7 @@
 }
 
 .month-nav-button:hover {
-  background: #5568d3;
+  background: #111827;
   transform: scale(1.1);
 }
 

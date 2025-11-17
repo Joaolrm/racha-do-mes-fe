@@ -4,6 +4,8 @@ import { apiService, type MonthlyBill } from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
 import { BillCard } from "../components/BillCard";
 import { SummaryCard } from "../components/SummaryCard";
+import { CreateBillModal } from "../components/CreateBillModal";
+import { InvitesDropdown } from "../components/InvitesDropdown";
 import { formatCurrency } from "../utils/formatters";
 import "./Home.css";
 
@@ -12,6 +14,7 @@ export function Home() {
   const [bills, setBills] = useState<MonthlyBill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -44,9 +47,18 @@ export function Home() {
       <header className="home-header">
         <div className="user-info">
           <h2>Olá, {user?.name}</h2>
-          <button onClick={logout} className="logout-button">
-            Sair
-          </button>
+          <div className="header-actions">
+            <InvitesDropdown onInviteAccepted={loadBills} />
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="create-bill-button"
+            >
+              + Nova Conta
+            </button>
+            <button onClick={logout} className="logout-button">
+              Sair
+            </button>
+          </div>
         </div>
       </header>
 
@@ -80,6 +92,15 @@ export function Home() {
           )}
         </div>
       )}
+
+      <CreateBillModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          loadBills();
+          setIsCreateModalOpen(false);
+        }}
+      />
     </div>
   );
 }

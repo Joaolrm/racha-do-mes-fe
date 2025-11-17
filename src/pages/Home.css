@@ -5,9 +5,11 @@
 }
 
 .home-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1.5rem 1rem;
+  background: white;
+  color: #1f2937;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .user-info {
@@ -16,24 +18,49 @@
   align-items: center;
 }
 
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.create-bill-button {
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.create-bill-button:hover {
+  background: #111827;
+}
+
 .user-info h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .logout-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  background: transparent;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   transition: background 0.2s;
 }
 
 .logout-button:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #f3f4f6;
 }
 
 .summary-cards {
@@ -72,5 +99,3 @@
   border-radius: 12px;
   margin: 1rem;
 }
-
-

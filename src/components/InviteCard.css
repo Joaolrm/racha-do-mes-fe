@@ -1,0 +1,129 @@
+.invite-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.invite-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.invite-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.invite-description {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.invite-owner {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.invite-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.invite-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+@media (min-width: 480px) {
+  .invite-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.invite-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.invite-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.invite-value {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.invite-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+}
+
+@media (min-width: 480px) {
+  .invite-actions {
+    flex-direction: row;
+  }
+}
+
+.invite-button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.invite-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invite-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.reject-button {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.reject-button:not(:disabled):hover {
+  background: #d0d0d0;
+}
+
+.accept-button {
+  background: #1f2937;
+  color: white;
+}
+
+.accept-button:not(:disabled):hover {
+  background: #111827;
+}

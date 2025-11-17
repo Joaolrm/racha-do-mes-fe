@@ -36,6 +36,44 @@ export interface MonthlyBill {
   user_value: number;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string | null;
+  phone_number: string | null;
+}
+
+export interface ParticipantDto {
+  user_id: number;
+  share_percentage: number;
+}
+
+export interface CreateBillDto {
+  descript: string;
+  type: "recorrente" | "parcelada";
+  due_day: number;
+  total_value?: number;
+  installments?: number;
+  start_month?: number;
+  start_year?: number;
+  current_month_value?: number;
+  participants: ParticipantDto[];
+}
+
+export interface PendingInvite {
+  bill_id: number;
+  descript: string;
+  type: "recorrente" | "parcelada";
+  due_day: number;
+  owner_name: string;
+  share_percentage: number;
+  created_at: string;
+}
+
+export interface AcceptInviteDto {
+  status: "accepted" | "rejected";
+}
+
 class ApiService {
   private getToken(): string | null {
     return localStorage.getItem("token");
@@ -89,6 +127,31 @@ class ApiService {
     return this.request<MonthlyBill[]>(
       `/bills/my-bills/monthly?month=${month}&year=${year}`
     );
+  }
+
+  async getUsers(): Promise<User[]> {
+    return this.request<User[]>("/users");
+  }
+
+  async createBill(data: CreateBillDto): Promise<void> {
+    return this.request<void>("/bills", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getPendingInvites(): Promise<PendingInvite[]> {
+    return this.request<PendingInvite[]>("/bills/invites/pending");
+  }
+
+  async respondToInvite(
+    billId: number,
+    status: "accepted" | "rejected"
+  ): Promise<void> {
+    return this.request<void>(`/bills/${billId}/invite`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
   }
 }
 
