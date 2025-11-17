@@ -1,0 +1,27 @@
+.summary-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.summary-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.summary-value.unpaid {
+  color: #e74c3c;
+}
+
+.summary-value.paid {
+  color: #27ae60;
+}

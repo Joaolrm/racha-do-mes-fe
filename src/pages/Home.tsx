@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { apiService, type MonthlyBill } from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
+import { BillCard } from "../components/BillCard";
+import { SummaryCard } from "../components/SummaryCard";
+import { formatCurrency } from "../utils/formatters";
 import "./Home.css";
 
 export function Home() {
@@ -14,11 +17,7 @@ export function Home() {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
 
-  useEffect(() => {
-    loadBills();
-  }, [month, year]);
-
-  const loadBills = async () => {
+  const loadBills = useCallback(async () => {
     setLoading(true);
     setError("");
 
@@ -30,24 +29,11 @@ export function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [month, year]);
 
-  const formatCurrency = (value: number | string) => {
-    const numValue = typeof value === "string" ? parseFloat(value) : value;
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(numValue);
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
+  useEffect(() => {
+    loadBills();
+  }, [loadBills]);
 
   const totalValue = bills.reduce((sum, bill) => sum + bill.user_value, 0);
   const paidCount = bills.filter((bill) => bill.is_paid).length;
@@ -74,18 +60,9 @@ export function Home() {
       />
 
       <div className="summary-cards">
-        <div className="summary-card">
-          <div className="summary-label">Total do Mês</div>
-          <div className="summary-value">{formatCurrency(totalValue)}</div>
-        </div>
-        <div className="summary-card">
-          <div className="summary-label">Pendentes</div>
-          <div className="summary-value unpaid">{unpaidCount}</div>
-        </div>
-        <div className="summary-card">
-          <div className="summary-label">Pagas</div>
-          <div className="summary-value paid">{paidCount}</div>
-        </div>
+        <SummaryCard label="Total do Mês" value={formatCurrency(totalValue)} />
+        <SummaryCard label="Pendentes" value={unpaidCount} variant="unpaid" />
+        <SummaryCard label="Pagas" value={paidCount} variant="paid" />
       </div>
 
       {loading && <div className="loading">Carregando contas...</div>}
@@ -99,57 +76,10 @@ export function Home() {
               <p>Nenhuma conta encontrada para este mês</p>
             </div>
           ) : (
-            bills.map((bill) => (
-              <div
-                key={bill.bill_id}
-                className={`bill-card ${bill.is_paid ? "paid" : "unpaid"}`}
-              >
-                <div className="bill-header">
-                  <h3 className="bill-description">{bill.descript}</h3>
-                  <span
-                    className={`bill-status ${
-                      bill.is_paid ? "paid" : "unpaid"
-                    }`}
-                  >
-                    {bill.is_paid ? "✓ Pago" : "Pendente"}
-                  </span>
-                </div>
-
-                <div className="bill-info">
-                  <div className="bill-detail">
-                    <span className="bill-label">Vencimento:</span>
-                    <span className="bill-value">
-                      {formatDate(bill.due_date)}
-                    </span>
-                  </div>
-
-                  {bill.installment_info && (
-                    <div className="bill-detail">
-                      <span className="bill-label">Parcela:</span>
-                      <span className="bill-value">
-                        {bill.installment_info}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="bill-detail">
-                    <span className="bill-label">Sua parte:</span>
-                    <span className="bill-value">{bill.share_percentage}%</span>
-                  </div>
-                </div>
-
-                <div className="bill-footer">
-                  <div className="bill-amount">
-                    {formatCurrency(bill.user_value)}
-                  </div>
-                  <div className="bill-type">{bill.type}</div>
-                </div>
-              </div>
-            ))
+            bills.map((bill) => <BillCard key={bill.bill_id} bill={bill} />)
           )}
         </div>
       )}
     </div>
   );
 }
-
