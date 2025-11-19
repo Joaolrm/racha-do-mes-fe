@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://localhost:3000";
+import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export interface LoginDto {
   emailOrPhone: string;
@@ -75,51 +77,65 @@ export interface AcceptInviteDto {
 }
 
 class ApiService {
+  private axiosInstance: AxiosInstance;
+
+  constructor() {
+    this.axiosInstance = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    // Interceptor para adicionar o token em todas as requisições
+    this.axiosInstance.interceptors.request.use((config) => {
+      const token = this.getToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
+    // Interceptor para tratar erros
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          `Erro ${error.response?.status || "desconhecido"}`;
+        throw new Error(errorMessage);
+      }
+    );
+  }
+
   private getToken(): string | null {
     return localStorage.getItem("token");
   }
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    config: AxiosRequestConfig = {}
   ): Promise<T> {
-    const token = this.getToken();
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(options.headers as Record<string, string>),
-    };
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers,
+    const response = await this.axiosInstance.request<T>({
+      url: endpoint,
+      ...config,
     });
-
-    if (!response.ok) {
-      const error = await response
-        .json()
-        .catch(() => ({ message: "Erro desconhecido" }));
-      throw new Error(error.message || `Erro ${response.status}`);
-    }
-
-    return response.json();
+    return response.data;
   }
 
   async login(credentials: LoginDto): Promise<AuthResponse> {
     return this.request<AuthResponse>("/auth/login", {
       method: "POST",
-      body: JSON.stringify(credentials),
+      data: credentials,
     });
   }
 
   async register(data: RegisterDto): Promise<AuthResponse> {
     return this.request<AuthResponse>("/auth/register", {
       method: "POST",
-      body: JSON.stringify(data),
+      data: data,
     });
   }
 
@@ -136,7 +152,7 @@ class ApiService {
   async createBill(data: CreateBillDto): Promise<void> {
     return this.request<void>("/bills", {
       method: "POST",
-      body: JSON.stringify(data),
+      data: data,
     });
   }
 
@@ -150,7 +166,7 @@ class ApiService {
   ): Promise<void> {
     return this.request<void>(`/bills/${billId}/invite`, {
       method: "PATCH",
-      body: JSON.stringify({ status }),
+      data: { status },
     });
   }
 }
