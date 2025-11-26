@@ -76,6 +76,26 @@ export interface AcceptInviteDto {
   status: "accepted" | "rejected";
 }
 
+export interface CreatePaymentDto {
+  bill_id: number;
+  month: number;
+  year: number;
+  payment_value: number;
+  payed_at: string;
+  receipt_photo?: File;
+}
+
+export interface Payment {
+  id: number;
+  bill_id: number;
+  user_id: number;
+  payment_value: number;
+  payed_at: string;
+  receipt_photo?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 class ApiService {
   private axiosInstance: AxiosInstance;
 
@@ -168,6 +188,32 @@ class ApiService {
       method: "PATCH",
       data: { status },
     });
+  }
+
+  async createPayment(data: CreatePaymentDto): Promise<void> {
+    const formData = new FormData();
+    formData.append("bill_id", data.bill_id.toString());
+    formData.append("month", data.month.toString());
+    formData.append("year", data.year.toString());
+    formData.append("payment_value", data.payment_value.toString());
+    formData.append("payed_at", data.payed_at);
+
+    if (data.receipt_photo) {
+      formData.append("receipt_photo", data.receipt_photo);
+    }
+
+    // Para FormData, o axios define o Content-Type automaticamente com o boundary correto
+    const response = await this.axiosInstance.post<void>("/payments", formData);
+    return response.data;
+  }
+
+  async getPayments(billId?: number, userId?: number): Promise<Payment[]> {
+    const params = new URLSearchParams();
+    if (billId) params.append("billId", billId.toString());
+    if (userId) params.append("userId", userId.toString());
+
+    const query = params.toString();
+    return this.request<Payment[]>(`/payments${query ? `?${query}` : ""}`);
   }
 }
 

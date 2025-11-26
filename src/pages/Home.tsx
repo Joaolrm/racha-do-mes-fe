@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { apiService, type MonthlyBill } from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
@@ -10,6 +11,7 @@ import { formatCurrency } from "../utils/formatters";
 import "./Home.css";
 
 export function Home() {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [bills, setBills] = useState<MonthlyBill[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,14 @@ export function Home() {
               <p>Nenhuma conta encontrada para este mês</p>
             </div>
           ) : (
-            bills.map((bill) => <BillCard key={bill.bill_id} bill={bill} />)
+            bills.map((bill) => (
+              <BillCard
+                key={bill.bill_id}
+                bill={bill}
+                month={month}
+                year={year}
+              />
+            ))
           )}
         </div>
       )}
