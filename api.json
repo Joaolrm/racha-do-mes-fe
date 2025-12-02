@@ -1,1604 +1,1495 @@
 {
-    "openapi": "3.0.0",
-    "paths": {
-      "/": {
-        "get": {
-          "description": "Retorna informações básicas sobre a API",
-          "operationId": "AppController_getInfo",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Informações da API",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "example": {
-                      "name": "Racha do Mês API",
-                      "version": "1.0",
-                      "description": "API para gerenciamento de despesas compartilhadas",
-                      "documentation": "/api/docs"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "summary": "Informações da API",
-          "tags": [
-            "Informações da API"
-          ]
-        }
-      },
-      "/health": {
-        "get": {
-          "description": "Verifica se a API está funcionando",
-          "operationId": "AppController_getHealth",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "API está funcionando",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "example": {
-                      "status": "ok",
-                      "timestamp": "2025-10-11T18:00:00.000Z"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "summary": "Health check",
-          "tags": [
-            "Informações da API"
-          ]
-        }
-      },
-      "/auth/register": {
-        "post": {
-          "operationId": "AuthController_register",
-          "parameters": [],
-          "requestBody": {
-            "required": true,
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Retorna informações básicas sobre a API",
+        "operationId": "AppController_getInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Informações da API",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegisterDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "Usuário registrado com sucesso",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "example": {
-                      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                      "user": {
-                        "id": 1,
-                        "name": "João da Silva",
-                        "email": "joao@email.com",
-                        "phone_number": "+5511999999999"
-                      }
-                    }
+                  "example": {
+                    "name": "Racha do Mês API",
+                    "version": "1.0",
+                    "description": "API para gerenciamento de despesas compartilhadas",
+                    "documentation": "/api/docs"
                   }
                 }
               }
-            },
-            "409": {
-              "description": "Email já cadastrado"
-            }
-          },
-          "summary": "Registrar novo usuário",
-          "tags": [
-            "Autenticação"
-          ]
-        }
-      },
-      "/auth/login": {
-        "post": {
-          "operationId": "AuthController_login",
-          "parameters": [],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Login realizado com sucesso",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "example": {
-                      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                      "user": {
-                        "id": 1,
-                        "name": "João da Silva",
-                        "email": "joao@email.com",
-                        "phone_number": "+5511999999999"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Credenciais inválidas"
-            }
-          },
-          "summary": "Fazer login",
-          "tags": [
-            "Autenticação"
-          ]
-        }
-      },
-      "/users": {
-        "get": {
-          "operationId": "UsersController_findAll",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Lista de usuários"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar todos os usuários",
-          "tags": [
-            "Usuários"
-          ]
-        }
-      },
-      "/users/{id}": {
-        "get": {
-          "operationId": "UsersController_findOne",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Usuário encontrado"
-            },
-            "404": {
-              "description": "Usuário não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Buscar usuário por ID",
-          "tags": [
-            "Usuários"
-          ]
-        },
-        "patch": {
-          "operationId": "UsersController_update",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateUserDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Usuário atualizado com sucesso"
-            },
-            "404": {
-              "description": "Usuário não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Atualizar usuário",
-          "tags": [
-            "Usuários"
-          ]
-        },
-        "delete": {
-          "operationId": "UsersController_remove",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Usuário removido com sucesso"
-            },
-            "404": {
-              "description": "Usuário não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Remover usuário",
-          "tags": [
-            "Usuários"
-          ]
-        }
-      },
-      "/bills": {
-        "post": {
-          "description": "O usuário autenticado será automaticamente o dono da conta e deve estar entre os participantes",
-          "operationId": "BillsController_create",
-          "parameters": [],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateBillDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "Conta criada com sucesso"
-            },
-            "400": {
-              "description": "Porcentagens inválidas, usuário não encontrado ou dono não está entre os participantes"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Criar nova conta",
-          "tags": [
-            "Contas"
-          ]
-        },
-        "get": {
-          "operationId": "BillsController_findAll",
-          "parameters": [
-            {
-              "name": "userId",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar contas por usuário",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Lista de contas"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar todas as contas",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/my-bills/monthly": {
-        "get": {
-          "description": "Retorna todas as contas do usuário autenticado no mês/ano especificado com valores, vencimentos e status de pagamento",
-          "operationId": "BillsController_getMyMonthlyBills",
-          "parameters": [
-            {
-              "name": "month",
-              "required": true,
-              "in": "query",
-              "description": "Mês (1-12)",
-              "schema": {
-                "example": 10,
-                "type": "number"
-              }
-            },
-            {
-              "name": "year",
-              "required": true,
-              "in": "query",
-              "description": "Ano",
-              "schema": {
-                "example": 2025,
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Lista de contas do mês",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/UserMonthlyBillResponseDto"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar contas do usuário autenticado para um mês específico",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/invites/pending": {
-        "get": {
-          "operationId": "BillsController_getPendingInvites",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Lista de convites pendentes"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar convites pendentes do usuário autenticado",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/{billId}/invite": {
-        "patch": {
-          "operationId": "BillsController_acceptInvite",
-          "parameters": [
-            {
-              "name": "billId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AcceptInviteDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Convite respondido com sucesso"
-            },
-            "400": {
-              "description": "Convite já foi respondido anteriormente"
-            },
-            "404": {
-              "description": "Convite não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Aceitar ou rejeitar convite de conta",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/{billId}": {
-        "patch": {
-          "description": "Permite atualizar a descrição e o valor total (apenas para contas parceladas). Apenas o dono pode atualizar.",
-          "operationId": "BillsController_updateBillInfo",
-          "parameters": [
-            {
-              "name": "billId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateBillInfoDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Conta atualizada com sucesso"
-            },
-            "400": {
-              "description": "Contas recorrentes não possuem valor total"
-            },
-            "403": {
-              "description": "Apenas o dono da conta pode atualizar"
-            },
-            "404": {
-              "description": "Conta não encontrada"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Atualizar informações gerais da conta",
-          "tags": [
-            "Contas"
-          ]
-        },
-        "delete": {
-          "description": "Apenas o dono da conta pode deletá-la. Todos os dados relacionados serão removidos.",
-          "operationId": "BillsController_deleteBill",
-          "parameters": [
-            {
-              "name": "billId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Conta deletada com sucesso"
-            },
-            "403": {
-              "description": "Apenas o dono da conta pode deletá-la"
-            },
-            "404": {
-              "description": "Conta não encontrada"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Deletar uma conta",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/{billId}/values": {
-        "get": {
-          "description": "Retorna todos os valores (mês a mês) de uma conta específica. Pode filtrar por mês e ano.",
-          "operationId": "BillsController_getBillValues",
-          "parameters": [
-            {
-              "name": "billId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            },
-            {
-              "name": "month",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar por mês (1-12)",
-              "schema": {
-                "type": "number"
-              }
-            },
-            {
-              "name": "year",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar por ano",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Lista de valores da conta"
-            },
-            "404": {
-              "description": "Conta não encontrada"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar valores individuais de uma conta",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/bills/{billId}/values/{month}/{year}": {
-        "patch": {
-          "description": "Permite atualizar o valor de uma conta em um mês/ano específico. Apenas o dono pode atualizar.",
-          "operationId": "BillsController_updateBillValue",
-          "parameters": [
-            {
-              "name": "billId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            },
-            {
-              "name": "month",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            },
-            {
-              "name": "year",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateBillValueDto"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Valor da conta atualizado com sucesso"
-            },
-            "403": {
-              "description": "Apenas o dono da conta pode atualizar os valores"
-            },
-            "404": {
-              "description": "Conta ou valor não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Atualizar valor da conta para um mês específico",
-          "tags": [
-            "Contas"
-          ]
-        }
-      },
-      "/payments": {
-        "post": {
-          "description": "Registra um pagamento e atualiza automaticamente os saldos entre os participantes. Pode incluir foto do comprovante.",
-          "operationId": "PaymentsController_create",
-          "parameters": [],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "multipart/form-data": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "bill_id",
-                    "month",
-                    "year",
-                    "payment_value",
-                    "payed_at"
-                  ],
-                  "properties": {
-                    "bill_id": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "month": {
-                      "type": "integer",
-                      "example": 10
-                    },
-                    "year": {
-                      "type": "integer",
-                      "example": 2025
-                    },
-                    "payment_value": {
-                      "type": "number",
-                      "example": 750
-                    },
-                    "payed_at": {
-                      "type": "string",
-                      "example": "2025-10-11T18:00:00.000Z"
-                    },
-                    "receipt_photo": {
-                      "type": "string",
-                      "format": "binary",
-                      "description": "Foto do comprovante (opcional)"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "Pagamento registrado com sucesso"
-            },
-            "400": {
-              "description": "Usuário não participa da conta"
-            },
-            "404": {
-              "description": "Conta não encontrada"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Registrar novo pagamento",
-          "tags": [
-            "Pagamentos"
-          ]
-        },
-        "get": {
-          "operationId": "PaymentsController_findAll",
-          "parameters": [
-            {
-              "name": "userId",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar pagamentos por usuário",
-              "schema": {
-                "type": "number"
-              }
-            },
-            {
-              "name": "billId",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar pagamentos por conta",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Lista de pagamentos"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Listar todos os pagamentos",
-          "tags": [
-            "Pagamentos"
-          ]
-        }
-      },
-      "/payments/{id}": {
-        "get": {
-          "operationId": "PaymentsController_findOne",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Pagamento encontrado"
-            },
-            "404": {
-              "description": "Pagamento não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Buscar pagamento por ID",
-          "tags": [
-            "Pagamentos"
-          ]
-        },
-        "put": {
-          "description": "Substitui completamente os dados do pagamento. Valor e data são obrigatórios. Apenas o dono pode editar.",
-          "operationId": "PaymentsController_update",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "multipart/form-data": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "payment_value",
-                    "payed_at"
-                  ],
-                  "properties": {
-                    "payment_value": {
-                      "type": "number",
-                      "example": 800,
-                      "description": "Valor do pagamento (obrigatório)"
-                    },
-                    "payed_at": {
-                      "type": "string",
-                      "example": "2025-10-12T18:00:00.000Z",
-                      "description": "Data do pagamento (obrigatório)"
-                    },
-                    "remove_receipt": {
-                      "type": "boolean",
-                      "example": false,
-                      "description": "Se true, remove a foto do comprovante (opcional, padrão: false)"
-                    },
-                    "receipt_photo": {
-                      "type": "string",
-                      "format": "binary",
-                      "description": "Nova foto do comprovante (opcional, substitui a anterior se existir)"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Pagamento atualizado com sucesso"
-            },
-            "400": {
-              "description": "Você não pode editar pagamentos de outros usuários"
-            },
-            "404": {
-              "description": "Pagamento não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Atualizar pagamento",
-          "tags": [
-            "Pagamentos"
-          ]
-        },
-        "delete": {
-          "description": "ATENÇÃO: Remover um pagamento não reverte automaticamente os saldos. A foto do comprovante será deletada.",
-          "operationId": "PaymentsController_remove",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Pagamento removido com sucesso"
-            },
-            "404": {
-              "description": "Pagamento não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Remover pagamento",
-          "tags": [
-            "Pagamentos"
-          ]
-        }
-      },
-      "/payments/{id}/receipt": {
-        "get": {
-          "description": "Retorna a foto do comprovante se existir",
-          "operationId": "PaymentsController_getReceipt",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Foto do comprovante",
-              "content": {
-                "image/jpeg": {
-  
-                },
-                "image/png": {
-  
-                },
-                "image/gif": {
-  
-                },
-                "image/webp": {
-  
-                }
-              }
-            },
-            "404": {
-              "description": "Comprovante não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Buscar foto do comprovante de pagamento",
-          "tags": [
-            "Pagamentos"
-          ]
-        }
-      },
-      "/balance/me": {
-        "get": {
-          "description": "Retorna resumo completo de dívidas e créditos do usuário logado",
-          "operationId": "BalanceController_getMyBalance",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Saldo do usuário",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/UserBalanceSummaryDto"
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Obter saldo do usuário autenticado",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      },
-      "/balance/user/{userId}": {
-        "get": {
-          "description": "Retorna resumo completo de dívidas e créditos de um usuário",
-          "operationId": "BalanceController_getUserBalance",
-          "parameters": [
-            {
-              "name": "userId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Saldo do usuário",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/UserBalanceSummaryDto"
-                  }
-                }
-              }
-            },
-            "404": {
-              "description": "Usuário não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Obter saldo de um usuário específico",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      },
-      "/balance/all": {
-        "get": {
-          "description": "Lista todas as relações de débito/crédito entre usuários",
-          "operationId": "BalanceController_getAllBalances",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Lista de saldos"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Obter todos os saldos",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      },
-      "/balance/history": {
-        "get": {
-          "description": "Lista histórico de todas as transações que geraram saldos",
-          "operationId": "BalanceController_getHistory",
-          "parameters": [
-            {
-              "name": "userId",
-              "required": false,
-              "in": "query",
-              "description": "Filtrar histórico por usuário",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Histórico de transações",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/HistoryResponseDto"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Obter histórico de transações",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      },
-      "/balance/charge-message/me": {
-        "get": {
-          "description": "Gera uma mensagem formatada para WhatsApp/Email com as dívidas pendentes",
-          "operationId": "BalanceController_getMyChargeMessage",
-          "parameters": [],
-          "responses": {
-            "200": {
-              "description": "Mensagem de cobrança gerada",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "example": {
-                      "message": "💰 *Resumo de Contas - Racha do Mês*\n\nOlá! Aqui está um resumo das suas contas:\n\n• Você deve *R$ 750.00* para Maria Santos\n\n📊 *Total a pagar: R$ 750.00*\n\nPor favor, realize o pagamento o mais breve possível. Obrigado! 😊"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Gerar mensagem de cobrança para o usuário autenticado",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      },
-      "/balance/charge-message/{userId}": {
-        "get": {
-          "description": "Gera uma mensagem formatada para WhatsApp/Email com as dívidas pendentes de um usuário específico",
-          "operationId": "BalanceController_getChargeMessage",
-          "parameters": [
-            {
-              "name": "userId",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Mensagem de cobrança gerada"
-            },
-            "404": {
-              "description": "Usuário não encontrado"
-            }
-          },
-          "security": [
-            {
-              "bearer": []
-            }
-          ],
-          "summary": "Gerar mensagem de cobrança para um usuário",
-          "tags": [
-            "Saldos e Histórico"
-          ]
-        }
-      }
-    },
-    "info": {
-      "title": "Racha do Mês API",
-      "description": "API para gerenciamento de despesas compartilhadas. Permite criar contas, registrar pagamentos, calcular saldos e gerar cobranças automatizadas.",
-      "version": "1.0",
-      "contact": {
-        "name": "João Luís Rosa de Moura",
-        "url": "https://github.com/Joaolrm",
-        "email": "jlluismr86@gmail.com"
-      },
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
-    },
-    "tags": [
-      {
-        "name": "Autenticação",
-        "description": "Endpoints de registro e login"
-      },
-      {
-        "name": "Usuários",
-        "description": "Gerenciamento de usuários"
-      },
-      {
-        "name": "Contas",
-        "description": "Gerenciamento de contas fixas e recorrentes"
-      },
-      {
-        "name": "Pagamentos",
-        "description": "Registro e consulta de pagamentos"
-      },
-      {
-        "name": "Saldos e Histórico",
-        "description": "Consulta de saldos e histórico de transações"
-      }
-    ],
-    "servers": [
-      {
-        "url": "http://localhost:3000",
-        "description": "Servidor Local"
-      }
-    ],
-    "components": {
-      "securitySchemes": {
-        "bearer": {
-          "scheme": "bearer",
-          "bearerFormat": "JWT",
-          "type": "http"
-        }
-      },
-      "schemas": {
-        "RegisterDto": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Nome completo do usuário",
-              "example": "João da Silva",
-              "maxLength": 120
-            },
-            "email": {
-              "type": "string",
-              "description": "Email do usuário (opcional)",
-              "example": "joao@email.com"
-            },
-            "phone_number": {
-              "type": "string",
-              "description": "Número de telefone do usuário (opcional)",
-              "example": "+5511999999999"
-            },
-            "password": {
-              "type": "string",
-              "description": "Senha do usuário",
-              "example": "senha123",
-              "minLength": 6
-            }
-          },
-          "required": [
-            "name",
-            "password"
-          ]
-        },
-        "LoginDto": {
-          "type": "object",
-          "properties": {
-            "emailOrPhone": {
-              "type": "string",
-              "description": "Email ou telefone do usuário",
-              "example": "joao@email.com"
-            },
-            "password": {
-              "type": "string",
-              "description": "Senha do usuário",
-              "example": "senha123"
-            }
-          },
-          "required": [
-            "emailOrPhone",
-            "password"
-          ]
-        },
-        "UpdateUserDto": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Nome completo do usuário",
-              "example": "Maria Santos",
-              "maxLength": 120
-            },
-            "email": {
-              "type": "string",
-              "description": "Email do usuário (opcional)",
-              "example": "maria@email.com"
-            },
-            "phone_number": {
-              "type": "string",
-              "description": "Número de telefone do usuário (opcional)",
-              "example": "+5511888888888"
             }
           }
         },
-        "ParticipantDto": {
-          "type": "object",
-          "properties": {
-            "user_id": {
-              "type": "number",
-              "description": "ID do usuário participante",
-              "example": 1
-            },
-            "share_percentage": {
-              "type": "number",
-              "description": "Porcentagem de participação (0-100)",
-              "example": 50,
-              "minimum": 0,
-              "maximum": 100
-            }
-          },
-          "required": [
-            "user_id",
-            "share_percentage"
-          ]
-        },
-        "CreateBillDto": {
-          "type": "object",
-          "properties": {
-            "descript": {
-              "type": "string",
-              "description": "Descrição da conta",
-              "example": "Aluguel do apartamento"
-            },
-            "type": {
-              "type": "string",
-              "description": "Tipo da conta",
-              "enum": [
-                "recorrente",
-                "parcelada"
-              ],
-              "example": "recorrente"
-            },
-            "due_day": {
-              "type": "number",
-              "description": "Dia do mês de vencimento (1-31)",
-              "example": 15,
-              "minimum": 1,
-              "maximum": 31
-            },
-            "total_value": {
-              "type": "number",
-              "description": "Valor total da conta (obrigatório apenas para contas parceladas)",
-              "example": 1500
-            },
-            "installments": {
-              "type": "number",
-              "description": "Número de parcelas (obrigatório apenas para contas parceladas)",
-              "example": 12
-            },
-            "start_month": {
-              "type": "number",
-              "description": "Mês de início (1-12, obrigatório apenas para contas parceladas)",
-              "example": 10
-            },
-            "start_year": {
-              "type": "number",
-              "description": "Ano de início (obrigatório apenas para contas parceladas)",
-              "example": 2025
-            },
-            "current_month_value": {
-              "type": "number",
-              "description": "Valor mensal (obrigatório apenas para contas recorrentes no mês atual)",
-              "example": 150
-            },
-            "participants": {
-              "description": "Lista de participantes da conta",
-              "example": [
-                {
-                  "user_id": 1,
-                  "share_percentage": 50
-                },
-                {
-                  "user_id": 2,
-                  "share_percentage": 50
+        "summary": "Informações da API",
+        "tags": ["Informações da API"]
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Verifica se a API está funcionando",
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "API está funcionando",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "status": "ok",
+                    "timestamp": "2025-10-11T18:00:00.000Z"
+                  }
                 }
-              ],
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/ParticipantDto"
+              }
+            }
+          }
+        },
+        "summary": "Health check",
+        "tags": ["Informações da API"]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "user": {
+                      "id": 1,
+                      "name": "João da Silva",
+                      "email": "joao@email.com",
+                      "phone_number": "+5511999999999"
+                    }
+                  }
+                }
               }
             }
           },
-          "required": [
-            "descript",
-            "type",
-            "due_day",
-            "participants"
-          ]
+          "409": {
+            "description": "Email já cadastrado"
+          }
         },
-        "UserMonthlyBillResponseDto": {
-          "type": "object",
-          "properties": {
-            "bill_id": {
-              "type": "number",
-              "description": "ID da conta",
-              "example": 1
-            },
-            "descript": {
-              "type": "string",
-              "description": "Descrição da conta",
-              "example": "Aluguel do apartamento"
-            },
-            "type": {
-              "type": "string",
-              "description": "Tipo da conta",
-              "enum": [
-                "recorrente",
-                "parcelada"
-              ],
-              "example": "recorrente"
-            },
-            "installment_number": {
-              "type": "number",
-              "description": "Número da parcela atual (apenas para contas parceladas, null para recorrentes)",
-              "example": 1,
-              "nullable": true
-            },
-            "total_installments": {
-              "type": "number",
-              "description": "Total de parcelas (apenas para contas parceladas, null para recorrentes)",
+        "summary": "Registrar novo usuário",
+        "tags": ["Autenticação"]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "user": {
+                      "id": 1,
+                      "name": "João da Silva",
+                      "email": "joao@email.com",
+                      "phone_number": "+5511999999999"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        },
+        "summary": "Fazer login",
+        "tags": ["Autenticação"]
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "UsersController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os usuários",
+        "tags": ["Usuários"]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar usuário por ID",
+        "tags": ["Usuários"]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar usuário",
+        "tags": ["Usuários"]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário removido com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover usuário",
+        "tags": ["Usuários"]
+      }
+    },
+    "/bills": {
+      "post": {
+        "description": "O usuário autenticado será automaticamente o dono da conta e deve estar entre os participantes",
+        "operationId": "BillsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conta criada com sucesso"
+          },
+          "400": {
+            "description": "Porcentagens inválidas, usuário não encontrado ou dono não está entre os participantes"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar nova conta",
+        "tags": ["Contas"]
+      },
+      "get": {
+        "operationId": "BillsController_findAll",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar contas por usuário",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de contas"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todas as contas",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/my-bills/monthly": {
+      "get": {
+        "description": "Retorna todas as contas do usuário autenticado no mês/ano especificado com valores, vencimentos e status de pagamento",
+        "operationId": "BillsController_getMyMonthlyBills",
+        "parameters": [
+          {
+            "name": "month",
+            "required": true,
+            "in": "query",
+            "description": "Mês (1-12)",
+            "schema": {
               "example": 10,
-              "nullable": true
-            },
-            "installment_info": {
-              "type": "string",
-              "description": "Parcela formatada (exemplo: \"1/10\", apenas para contas parceladas)",
-              "example": "1/10",
-              "nullable": true
-            },
-            "due_date": {
-              "format": "date-time",
-              "type": "string",
-              "description": "Data de vencimento",
-              "example": "2025-10-15T00:00:00.000Z"
-            },
-            "value": {
-              "type": "number",
-              "description": "Valor da conta no mês especificado",
-              "example": 150
-            },
-            "is_paid": {
-              "type": "boolean",
-              "description": "Se o usuário já pagou sua parte",
-              "example": false
-            },
-            "share_percentage": {
-              "type": "number",
-              "description": "Porcentagem de participação do usuário na conta",
-              "example": 50
-            },
-            "user_value": {
-              "type": "number",
-              "description": "Valor que o usuário deve pagar (value * share_percentage / 100)",
-              "example": 75
+              "type": "number"
             }
           },
-          "required": [
-            "bill_id",
-            "descript",
-            "type",
-            "due_date",
-            "value",
-            "is_paid",
-            "share_percentage",
-            "user_value"
-          ]
-        },
-        "AcceptInviteDto": {
-          "type": "object",
-          "properties": {
-            "status": {
-              "type": "string",
-              "description": "Status do convite",
-              "enum": [
-                "accepted",
-                "rejected"
-              ],
-              "example": "accepted"
+          {
+            "name": "year",
+            "required": true,
+            "in": "query",
+            "description": "Ano",
+            "schema": {
+              "example": 2025,
+              "type": "number"
             }
-          },
-          "required": [
-            "status"
-          ]
-        },
-        "UpdateBillInfoDto": {
-          "type": "object",
-          "properties": {
-            "descript": {
-              "type": "string",
-              "description": "Nova descrição da conta",
-              "example": "Aluguel do apartamento - Centro"
-            },
-            "total_value": {
-              "type": "number",
-              "description": "Novo valor total da conta (apenas para contas parceladas). Não altera os valores individuais já criados.",
-              "example": 1800
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de contas do mês",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserMonthlyBillResponseDto"
+                  }
+                }
+              }
             }
           }
         },
-        "UpdateBillValueDto": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "number",
-              "description": "Novo valor da conta para o mês especificado",
-              "example": 180
-            }
-          },
-          "required": [
-            "value"
-          ]
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar contas do usuário autenticado para um mês específico",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/invites/pending": {
+      "get": {
+        "operationId": "BillsController_getPendingInvites",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de convites pendentes"
+          }
         },
-        "BalanceResponseDto": {
-          "type": "object",
-          "properties": {
-            "debtor_user_id": {
-              "type": "number",
-              "description": "ID do usuário devedor",
-              "example": 1
-            },
-            "debtor_name": {
-              "type": "string",
-              "description": "Nome do usuário devedor",
-              "example": "João da Silva"
-            },
-            "borrower_user_id": {
-              "type": "number",
-              "description": "ID do usuário credor",
-              "example": 2
-            },
-            "borrower_name": {
-              "type": "string",
-              "description": "Nome do usuário credor",
-              "example": "Maria Santos"
-            },
-            "value": {
-              "type": "number",
-              "description": "Valor da dívida",
-              "example": 750
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar convites pendentes do usuário autenticado",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/{billId}/invite": {
+      "patch": {
+        "operationId": "BillsController_acceptInvite",
+        "parameters": [
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
-          },
-          "required": [
-            "debtor_user_id",
-            "debtor_name",
-            "borrower_user_id",
-            "borrower_name",
-            "value"
-          ]
-        },
-        "UserBalanceSummaryDto": {
-          "type": "object",
-          "properties": {
-            "total_debts": {
-              "type": "number",
-              "description": "Total que o usuário deve",
-              "example": 1500
-            },
-            "total_credits": {
-              "type": "number",
-              "description": "Total que devem ao usuário",
-              "example": 750
-            },
-            "net_balance": {
-              "type": "number",
-              "description": "Saldo líquido (negativo = deve, positivo = a receber)",
-              "example": -750
-            },
-            "debts": {
-              "description": "Dívidas individuais",
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/BalanceResponseDto"
-              }
-            },
-            "credits": {
-              "description": "Créditos individuais",
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/BalanceResponseDto"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptInviteDto"
               }
             }
-          },
-          "required": [
-            "total_debts",
-            "total_credits",
-            "net_balance",
-            "debts",
-            "credits"
-          ]
+          }
         },
-        "HistoryResponseDto": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "number",
-              "description": "ID do histórico",
-              "example": 1
-            },
-            "debtor_user_id": {
-              "type": "number",
-              "description": "ID do usuário devedor",
-              "example": 1
-            },
-            "debtor_name": {
-              "type": "string",
-              "description": "Nome do usuário devedor",
-              "example": "João da Silva"
-            },
-            "borrower_user_id": {
-              "type": "number",
-              "description": "ID do usuário credor",
-              "example": 2
-            },
-            "borrower_name": {
-              "type": "string",
-              "description": "Nome do usuário credor",
-              "example": "Maria Santos"
-            },
-            "bill_id": {
-              "type": "number",
-              "description": "ID da conta relacionada (opcional)",
-              "example": 1
-            },
-            "descript": {
-              "type": "string",
-              "description": "Descrição da transação",
-              "example": "Pagamento de aluguel - Outubro/2025"
-            },
-            "value": {
-              "type": "number",
-              "description": "Valor da transação",
-              "example": 750
-            },
-            "created_at": {
-              "format": "date-time",
-              "type": "string",
-              "description": "Data da transação",
-              "example": "2025-10-11T18:00:00.000Z"
+        "responses": {
+          "200": {
+            "description": "Convite respondido com sucesso"
+          },
+          "400": {
+            "description": "Convite já foi respondido anteriormente"
+          },
+          "404": {
+            "description": "Convite não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Aceitar ou rejeitar convite de conta",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/{billId}": {
+      "patch": {
+        "description": "Permite atualizar a descrição e o valor total (apenas para contas parceladas). Apenas o dono pode atualizar.",
+        "operationId": "BillsController_updateBillInfo",
+        "parameters": [
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillInfoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conta atualizada com sucesso"
+          },
+          "400": {
+            "description": "Contas recorrentes não possuem valor total"
+          },
+          "403": {
+            "description": "Apenas o dono da conta pode atualizar"
+          },
+          "404": {
+            "description": "Conta não encontrada"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar informações gerais da conta",
+        "tags": ["Contas"]
+      },
+      "delete": {
+        "description": "Apenas o dono da conta pode deletá-la. Todos os dados relacionados serão removidos.",
+        "operationId": "BillsController_deleteBill",
+        "parameters": [
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta deletada com sucesso"
+          },
+          "403": {
+            "description": "Apenas o dono da conta pode deletá-la"
+          },
+          "404": {
+            "description": "Conta não encontrada"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Deletar uma conta",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/{billId}/values": {
+      "get": {
+        "description": "Retorna todos os valores (mês a mês) de uma conta específica. Pode filtrar por mês e ano.",
+        "operationId": "BillsController_getBillValues",
+        "parameters": [
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
-          "required": [
-            "id",
-            "debtor_user_id",
-            "debtor_name",
-            "borrower_user_id",
-            "borrower_name",
-            "descript",
-            "value",
-            "created_at"
-          ]
+          {
+            "name": "month",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por mês (1-12)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "year",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por ano",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de valores da conta"
+          },
+          "404": {
+            "description": "Conta não encontrada"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar valores individuais de uma conta",
+        "tags": ["Contas"]
+      }
+    },
+    "/bills/{billId}/values/{month}/{year}": {
+      "patch": {
+        "description": "Permite atualizar o valor de uma conta em um mês/ano específico. Apenas o dono pode atualizar.",
+        "operationId": "BillsController_updateBillValue",
+        "parameters": [
+          {
+            "name": "billId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "month",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "year",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillValueDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Valor da conta atualizado com sucesso"
+          },
+          "403": {
+            "description": "Apenas o dono da conta pode atualizar os valores"
+          },
+          "404": {
+            "description": "Conta ou valor não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar valor da conta para um mês específico",
+        "tags": ["Contas"]
+      }
+    },
+    "/payments": {
+      "post": {
+        "description": "Registra um pagamento e atualiza automaticamente os saldos entre os participantes. Pode incluir foto do comprovante.",
+        "operationId": "PaymentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["bill_value_id", "payment_value", "payed_at"],
+                "properties": {
+                  "bill_value_id": {
+                    "type": "integer",
+                    "example": 1,
+                    "description": "ID da parcela (BillValue)"
+                  },
+                  "payment_value": {
+                    "type": "number",
+                    "example": 750
+                  },
+                  "payed_at": {
+                    "type": "string",
+                    "example": "2025-10-11T18:00:00.000Z"
+                  },
+                  "receipt_photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Foto do comprovante (opcional)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pagamento registrado com sucesso"
+          },
+          "400": {
+            "description": "Usuário não participa da conta"
+          },
+          "404": {
+            "description": "Conta não encontrada"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Registrar novo pagamento",
+        "tags": ["Pagamentos"]
+      },
+      "get": {
+        "operationId": "PaymentsController_findAll",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar pagamentos por usuário",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "billId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar pagamentos por conta",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pagamentos"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os pagamentos",
+        "tags": ["Pagamentos"]
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "operationId": "PaymentsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagamento encontrado"
+          },
+          "404": {
+            "description": "Pagamento não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar pagamento por ID",
+        "tags": ["Pagamentos"]
+      },
+      "put": {
+        "description": "Substitui completamente os dados do pagamento. Valor e data são obrigatórios. Apenas o dono pode editar.",
+        "operationId": "PaymentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["payment_value", "payed_at"],
+                "properties": {
+                  "payment_value": {
+                    "type": "number",
+                    "example": 800,
+                    "description": "Valor do pagamento (obrigatório)"
+                  },
+                  "payed_at": {
+                    "type": "string",
+                    "example": "2025-10-12T18:00:00.000Z",
+                    "description": "Data do pagamento (obrigatório)"
+                  },
+                  "remove_receipt": {
+                    "type": "boolean",
+                    "example": false,
+                    "description": "Se true, remove a foto do comprovante (opcional, padrão: false)"
+                  },
+                  "receipt_photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Nova foto do comprovante (opcional, substitui a anterior se existir)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pagamento atualizado com sucesso"
+          },
+          "400": {
+            "description": "Você não pode editar pagamentos de outros usuários"
+          },
+          "404": {
+            "description": "Pagamento não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar pagamento",
+        "tags": ["Pagamentos"]
+      },
+      "delete": {
+        "description": "ATENÇÃO: Remover um pagamento não reverte automaticamente os saldos.",
+        "operationId": "PaymentsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagamento removido com sucesso"
+          },
+          "404": {
+            "description": "Pagamento não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover pagamento",
+        "tags": ["Pagamentos"]
+      }
+    },
+    "/payments/{id}/receipt": {
+      "get": {
+        "description": "Retorna a foto do comprovante se existir",
+        "operationId": "PaymentsController_getReceipt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Foto do comprovante",
+            "content": {
+              "image/jpeg": {},
+              "image/png": {},
+              "image/gif": {},
+              "image/webp": {}
+            }
+          },
+          "404": {
+            "description": "Comprovante não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar foto do comprovante de pagamento",
+        "tags": ["Pagamentos"]
+      }
+    },
+    "/balance/me": {
+      "get": {
+        "description": "Retorna resumo completo de dívidas e créditos do usuário logado",
+        "operationId": "BalanceController_getMyBalance",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Saldo do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBalanceSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter saldo do usuário autenticado",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/user/{userId}": {
+      "get": {
+        "description": "Retorna resumo completo de dívidas e créditos de um usuário",
+        "operationId": "BalanceController_getUserBalance",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saldo do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBalanceSummaryDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter saldo de um usuário específico",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/all": {
+      "get": {
+        "description": "Lista todas as relações de débito/crédito entre usuários",
+        "operationId": "BalanceController_getAllBalances",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de saldos"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter todos os saldos",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/history": {
+      "get": {
+        "description": "Lista histórico de todas as transações que geraram saldos",
+        "operationId": "BalanceController_getHistory",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar histórico por usuário",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico de transações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter histórico de transações",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/charge-message/me": {
+      "get": {
+        "description": "Gera uma mensagem formatada para WhatsApp/Email com as dívidas pendentes",
+        "operationId": "BalanceController_getMyChargeMessage",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Mensagem de cobrança gerada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "💰 *Resumo de Contas - Racha do Mês*\n\nOlá! Aqui está um resumo das suas contas:\n\n• Você deve *R$ 750.00* para Maria Santos\n\n📊 *Total a pagar: R$ 750.00*\n\nPor favor, realize o pagamento o mais breve possível. Obrigado! 😊"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Gerar mensagem de cobrança para o usuário autenticado",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/charge-message/{userId}": {
+      "get": {
+        "description": "Gera uma mensagem formatada para WhatsApp/Email com as dívidas pendentes de um usuário específico",
+        "operationId": "BalanceController_getChargeMessage",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensagem de cobrança gerada"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Gerar mensagem de cobrança para um usuário",
+        "tags": ["Saldos e Histórico"]
+      }
+    }
+  },
+  "info": {
+    "title": "Racha do Mês API",
+    "description": "API para gerenciamento de despesas compartilhadas. Permite criar contas, registrar pagamentos, calcular saldos e gerar cobranças automatizadas.",
+    "version": "1.0",
+    "contact": {
+      "name": "João Luís Rosa de Moura",
+      "url": "https://github.com/Joaolrm",
+      "email": "jlluismr86@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Autenticação",
+      "description": "Endpoints de registro e login"
+    },
+    {
+      "name": "Usuários",
+      "description": "Gerenciamento de usuários"
+    },
+    {
+      "name": "Contas",
+      "description": "Gerenciamento de contas fixas e recorrentes"
+    },
+    {
+      "name": "Pagamentos",
+      "description": "Registro e consulta de pagamentos"
+    },
+    {
+      "name": "Saldos e Histórico",
+      "description": "Consulta de saldos e histórico de transações"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor Local"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome completo do usuário",
+            "example": "João da Silva",
+            "maxLength": 120
+          },
+          "email": {
+            "type": "string",
+            "description": "Email do usuário (opcional)",
+            "example": "joao@email.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Número de telefone do usuário (opcional)",
+            "example": "+5511999999999"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário",
+            "example": "senha123",
+            "minLength": 6
+          }
+        },
+        "required": ["name", "password"]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "emailOrPhone": {
+            "type": "string",
+            "description": "Email ou telefone do usuário",
+            "example": "joao@email.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário",
+            "example": "senha123"
+          }
+        },
+        "required": ["emailOrPhone", "password"]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome completo do usuário",
+            "example": "Maria Santos",
+            "maxLength": 120
+          },
+          "email": {
+            "type": "string",
+            "description": "Email do usuário (opcional)",
+            "example": "maria@email.com"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Número de telefone do usuário (opcional)",
+            "example": "+5511888888888"
+          }
         }
+      },
+      "ParticipantDto": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "number",
+            "description": "ID do usuário participante",
+            "example": 1
+          },
+          "share_percentage": {
+            "type": "number",
+            "description": "Porcentagem de participação (0-100)",
+            "example": 50,
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": ["user_id", "share_percentage"]
+      },
+      "CreateBillDto": {
+        "type": "object",
+        "properties": {
+          "descript": {
+            "type": "string",
+            "description": "Descrição da conta",
+            "example": "Aluguel do apartamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo da conta",
+            "enum": ["recorrente", "parcelada"],
+            "example": "recorrente"
+          },
+          "due_day": {
+            "type": "number",
+            "description": "Dia do mês de vencimento (1-31)",
+            "example": 15,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "total_value": {
+            "type": "number",
+            "description": "Valor total da conta (obrigatório apenas para contas parceladas)",
+            "example": 1500
+          },
+          "installments": {
+            "type": "number",
+            "description": "Número de parcelas (obrigatório apenas para contas parceladas)",
+            "example": 12
+          },
+          "start_month": {
+            "type": "number",
+            "description": "Mês de início (1-12, obrigatório apenas para contas parceladas)",
+            "example": 10
+          },
+          "start_year": {
+            "type": "number",
+            "description": "Ano de início (obrigatório apenas para contas parceladas)",
+            "example": 2025
+          },
+          "current_month_value": {
+            "type": "number",
+            "description": "Valor mensal (obrigatório apenas para contas recorrentes no mês atual)",
+            "example": 150
+          },
+          "participants": {
+            "description": "Lista de participantes da conta",
+            "example": [
+              {
+                "user_id": 1,
+                "share_percentage": 50
+              },
+              {
+                "user_id": 2,
+                "share_percentage": 50
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParticipantDto"
+            }
+          }
+        },
+        "required": ["descript", "type", "due_day", "participants"]
+      },
+      "UserMonthlyBillResponseDto": {
+        "type": "object",
+        "properties": {
+          "bill_id": {
+            "type": "number",
+            "description": "ID da conta",
+            "example": 1
+          },
+          "descript": {
+            "type": "string",
+            "description": "Descrição da conta",
+            "example": "Aluguel do apartamento"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo da conta",
+            "enum": ["recorrente", "parcelada"],
+            "example": "recorrente"
+          },
+          "installment_number": {
+            "type": "number",
+            "description": "Número da parcela atual (apenas para contas parceladas, null para recorrentes)",
+            "example": 1,
+            "nullable": true
+          },
+          "total_installments": {
+            "type": "number",
+            "description": "Total de parcelas (apenas para contas parceladas, null para recorrentes)",
+            "example": 10,
+            "nullable": true
+          },
+          "installment_info": {
+            "type": "string",
+            "description": "Parcela formatada (exemplo: \"1/10\", apenas para contas parceladas)",
+            "example": "1/10",
+            "nullable": true
+          },
+          "due_date": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Data de vencimento",
+            "example": "2025-10-15T00:00:00.000Z"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor da conta no mês especificado",
+            "example": 150
+          },
+          "is_paid": {
+            "type": "boolean",
+            "description": "Se o usuário já pagou sua parte",
+            "example": false
+          },
+          "share_percentage": {
+            "type": "number",
+            "description": "Porcentagem de participação do usuário na conta",
+            "example": 50
+          },
+          "user_value": {
+            "type": "number",
+            "description": "Valor que o usuário deve pagar (value * share_percentage / 100)",
+            "example": 75
+          }
+        },
+        "required": [
+          "bill_id",
+          "descript",
+          "type",
+          "due_date",
+          "value",
+          "is_paid",
+          "share_percentage",
+          "user_value"
+        ]
+      },
+      "AcceptInviteDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status do convite",
+            "enum": ["accepted", "rejected"],
+            "example": "accepted"
+          }
+        },
+        "required": ["status"]
+      },
+      "UpdateBillInfoDto": {
+        "type": "object",
+        "properties": {
+          "descript": {
+            "type": "string",
+            "description": "Nova descrição da conta",
+            "example": "Aluguel do apartamento - Centro"
+          },
+          "total_value": {
+            "type": "number",
+            "description": "Novo valor total da conta (apenas para contas parceladas). Não altera os valores individuais já criados.",
+            "example": 1800
+          }
+        }
+      },
+      "UpdateBillValueDto": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Novo valor da conta para o mês especificado",
+            "example": 180
+          }
+        },
+        "required": ["value"]
+      },
+      "BalanceResponseDto": {
+        "type": "object",
+        "properties": {
+          "debtor_user_id": {
+            "type": "number",
+            "description": "ID do usuário devedor",
+            "example": 1
+          },
+          "debtor_name": {
+            "type": "string",
+            "description": "Nome do usuário devedor",
+            "example": "João da Silva"
+          },
+          "borrower_user_id": {
+            "type": "number",
+            "description": "ID do usuário credor",
+            "example": 2
+          },
+          "borrower_name": {
+            "type": "string",
+            "description": "Nome do usuário credor",
+            "example": "Maria Santos"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor da dívida",
+            "example": 750
+          }
+        },
+        "required": [
+          "debtor_user_id",
+          "debtor_name",
+          "borrower_user_id",
+          "borrower_name",
+          "value"
+        ]
+      },
+      "UserBalanceSummaryDto": {
+        "type": "object",
+        "properties": {
+          "total_debts": {
+            "type": "number",
+            "description": "Total que o usuário deve",
+            "example": 1500
+          },
+          "total_credits": {
+            "type": "number",
+            "description": "Total que devem ao usuário",
+            "example": 750
+          },
+          "net_balance": {
+            "type": "number",
+            "description": "Saldo líquido (negativo = deve, positivo = a receber)",
+            "example": -750
+          },
+          "debts": {
+            "description": "Dívidas individuais",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BalanceResponseDto"
+            }
+          },
+          "credits": {
+            "description": "Créditos individuais",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BalanceResponseDto"
+            }
+          }
+        },
+        "required": [
+          "total_debts",
+          "total_credits",
+          "net_balance",
+          "debts",
+          "credits"
+        ]
+      },
+      "HistoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID do histórico",
+            "example": 1
+          },
+          "debtor_user_id": {
+            "type": "number",
+            "description": "ID do usuário devedor",
+            "example": 1
+          },
+          "debtor_name": {
+            "type": "string",
+            "description": "Nome do usuário devedor",
+            "example": "João da Silva"
+          },
+          "borrower_user_id": {
+            "type": "number",
+            "description": "ID do usuário credor",
+            "example": 2
+          },
+          "borrower_name": {
+            "type": "string",
+            "description": "Nome do usuário credor",
+            "example": "Maria Santos"
+          },
+          "bill_id": {
+            "type": "number",
+            "description": "ID da conta relacionada (opcional)",
+            "example": 1
+          },
+          "descript": {
+            "type": "string",
+            "description": "Descrição da transação",
+            "example": "Pagamento de aluguel - Outubro/2025"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor da transação",
+            "example": 750
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Data da transação",
+            "example": "2025-10-11T18:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "debtor_user_id",
+          "debtor_name",
+          "borrower_user_id",
+          "borrower_name",
+          "descript",
+          "value",
+          "created_at"
+        ]
       }
     }
   }
+}

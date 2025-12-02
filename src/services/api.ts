@@ -36,6 +36,15 @@ export interface MonthlyBill {
   is_paid: boolean;
   share_percentage: string;
   user_value: number;
+  bill_value_id?: number;
+}
+
+export interface BillValue {
+  id: number;
+  bill_id: number;
+  month: number;
+  year: number;
+  value: number;
 }
 
 export interface User {
@@ -77,9 +86,7 @@ export interface AcceptInviteDto {
 }
 
 export interface CreatePaymentDto {
-  bill_id: number;
-  month: number;
-  year: number;
+  bill_value_id: number;
   payment_value: number;
   payed_at: string;
   receipt_photo?: File;
@@ -160,9 +167,20 @@ class ApiService {
   }
 
   async getMonthlyBills(month: number, year: number): Promise<MonthlyBill[]> {
-    return this.request<MonthlyBill[]>(
+    const data = await this.request<MonthlyBill[]>(
       `/bills/my-bills/monthly?month=${month}&year=${year}`
     );
+    // Normaliza is_paid para garantir que seja sempre boolean
+    return data.map((bill) => ({
+      ...bill,
+      is_paid:
+        typeof bill.is_paid === "boolean"
+          ? bill.is_paid
+          : bill.is_paid === "true" ||
+            bill.is_paid === "1" ||
+            bill.is_paid === 1 ||
+            bill.is_paid === true,
+    }));
   }
 
   async getUsers(): Promise<User[]> {
@@ -190,11 +208,24 @@ class ApiService {
     });
   }
 
+  async getBillValues(
+    billId: number,
+    month?: number,
+    year?: number
+  ): Promise<BillValue[]> {
+    const params = new URLSearchParams();
+    if (month) params.append("month", month.toString());
+    if (year) params.append("year", year.toString());
+
+    const query = params.toString();
+    return this.request<BillValue[]>(
+      `/bills/${billId}/values${query ? `?${query}` : ""}`
+    );
+  }
+
   async createPayment(data: CreatePaymentDto): Promise<void> {
     const formData = new FormData();
-    formData.append("bill_id", data.bill_id.toString());
-    formData.append("month", data.month.toString());
-    formData.append("year", data.year.toString());
+    formData.append("bill_value_id", data.bill_value_id.toString());
     formData.append("payment_value", data.payment_value.toString());
     formData.append("payed_at", data.payed_at);
 
@@ -214,6 +245,12 @@ class ApiService {
 
     const query = params.toString();
     return this.request<Payment[]>(`/payments${query ? `?${query}` : ""}`);
+  }
+
+  async deleteBill(billId: number): Promise<void> {
+    return this.request<void>(`/bills/${billId}`, {
+      method: "DELETE",
+    });
   }
 }
 

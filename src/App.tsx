@@ -4,7 +4,7 @@ import { useAuth } from "./hooks/useAuth";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Home } from "./pages/Home";
-import { Payments } from "./pages/Payments";
+import { CreateBill } from "./pages/CreateBill";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function AppRoutes() {
@@ -29,10 +29,10 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/payments"
+        path="/create-bill"
         element={
           <ProtectedRoute>
-            <Payments />
+            <CreateBill />
           </ProtectedRoute>
         }
       />

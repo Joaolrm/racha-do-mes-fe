@@ -5,7 +5,6 @@ import { apiService, type MonthlyBill } from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
 import { BillCard } from "../components/BillCard";
 import { SummaryCard } from "../components/SummaryCard";
-import { CreateBillModal } from "../components/CreateBillModal";
 import { InvitesDropdown } from "../components/InvitesDropdown";
 import { formatCurrency } from "../utils/formatters";
 import "./Home.css";
@@ -16,7 +15,6 @@ export function Home() {
   const [bills, setBills] = useState<MonthlyBill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -52,7 +50,7 @@ export function Home() {
           <div className="header-actions">
             <InvitesDropdown onInviteAccepted={loadBills} />
             <button
-              onClick={() => setIsCreateModalOpen(true)}
+              onClick={() => navigate("/create-bill")}
               className="create-bill-button"
             >
               + Nova Conta
@@ -96,20 +94,13 @@ export function Home() {
                 bill={bill}
                 month={month}
                 year={year}
+                onBillDeleted={loadBills}
+                onPaymentSuccess={loadBills}
               />
             ))
           )}
         </div>
       )}
-
-      <CreateBillModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSuccess={() => {
-          loadBills();
-          setIsCreateModalOpen(false);
-        }}
-      />
     </div>
   );
 }
