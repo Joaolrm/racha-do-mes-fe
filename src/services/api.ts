@@ -86,7 +86,10 @@ export interface AcceptInviteDto {
 }
 
 export interface CreatePaymentDto {
-  bill_value_id: number;
+  bill_value_id?: number;
+  bill_id?: number;
+  month?: number;
+  year?: number;
   payment_value: number;
   payed_at: string;
   receipt_photo?: File;
@@ -225,7 +228,19 @@ class ApiService {
 
   async createPayment(data: CreatePaymentDto): Promise<void> {
     const formData = new FormData();
-    formData.append("bill_value_id", data.bill_value_id.toString());
+
+    if (data.bill_value_id) {
+      formData.append("bill_value_id", data.bill_value_id.toString());
+    } else if (data.bill_id && data.month && data.year) {
+      formData.append("bill_id", data.bill_id.toString());
+      formData.append("month", data.month.toString());
+      formData.append("year", data.year.toString());
+    } else {
+      throw new Error(
+        "É necessário fornecer bill_value_id ou (bill_id, month e year)"
+      );
+    }
+
     formData.append("payment_value", data.payment_value.toString());
     formData.append("payed_at", data.payed_at);
 

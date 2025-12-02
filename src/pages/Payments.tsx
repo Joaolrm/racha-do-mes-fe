@@ -182,33 +182,51 @@ export function Payments() {
     setSubmitting(true);
 
     try {
-      // Buscar o bill_value_id
-      const billValues = await apiService.getBillValues(
-        parseInt(formData.bill_id),
-        formData.month,
-        formData.year
-      );
-      const billValue = billValues.find(
-        (bv) => bv.month === formData.month && bv.year === formData.year
-      );
-
-      if (!billValue) {
-        setError(
-          "Não foi possível encontrar o valor da conta para este mês/ano"
-        );
-        setSubmitting(false);
-        return;
-      }
-
       const payedAtDate = new Date(formData.payed_at);
       payedAtDate.setHours(12, 0, 0, 0);
 
-      await apiService.createPayment({
-        bill_value_id: billValue.id,
+      // Tentar buscar o bill_value_id primeiro
+      const paymentData: {
+        bill_value_id?: number;
+        bill_id?: number;
+        month?: number;
+        year?: number;
+        payment_value: number;
+        payed_at: string;
+        receipt_photo?: File;
+      } = {
         payment_value: parseFloat(formData.payment_value),
         payed_at: payedAtDate.toISOString(),
         receipt_photo: formData.receipt_photo || undefined,
-      });
+      };
+
+      try {
+        const billValues = await apiService.getBillValues(
+          parseInt(formData.bill_id),
+          formData.month,
+          formData.year
+        );
+        const billValue = billValues.find(
+          (bv) => bv.month === formData.month && bv.year === formData.year
+        );
+
+        if (billValue) {
+          // Se encontrou o bill_value_id, usa ele
+          paymentData.bill_value_id = billValue.id;
+        } else {
+          // Se não encontrou, usa bill_id, month e year (para contas recorrentes sem bill-value gerado)
+          paymentData.bill_id = parseInt(formData.bill_id);
+          paymentData.month = formData.month;
+          paymentData.year = formData.year;
+        }
+      } catch {
+        // Se der erro ao buscar, usa bill_id, month e year diretamente
+        paymentData.bill_id = parseInt(formData.bill_id);
+        paymentData.month = formData.month;
+        paymentData.year = formData.year;
+      }
+
+      await apiService.createPayment(paymentData);
 
       setSuccess(true);
       setFormData({
