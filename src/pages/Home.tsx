@@ -49,11 +49,6 @@ export function Home() {
     }
   }, [month, year]);
 
-  useEffect(() => {
-    loadBills();
-    loadDebts();
-  }, [loadBills]);
-
   const loadDebts = useCallback(async () => {
     try {
       const data = await apiService.getMyDebts();
@@ -63,6 +58,11 @@ export function Home() {
       console.error("Erro ao carregar dívidas:", err);
     }
   }, []);
+
+  useEffect(() => {
+    loadBills();
+    loadDebts();
+  }, [loadBills, loadDebts]);
 
   // Atualiza mês/ano quando volta de outras páginas
   useEffect(() => {

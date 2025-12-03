@@ -93,7 +93,7 @@ export function Payments() {
       if (selectedBill && !isFromSpecificBill) {
         setFormData((prev) => ({
           ...prev,
-          [name]: newValue,
+          [name]: value, // Garantir que seja sempre string
           payment_value: selectedBill.value.toString(),
         }));
         return;

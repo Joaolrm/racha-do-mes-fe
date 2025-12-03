@@ -38,12 +38,6 @@ export function DebtDetailPage() {
     }
   };
 
-  const handlePayDebt = () => {
-    // Por enquanto, vamos navegar para a página de pagamentos
-    // O usuário pode selecionar a conta relacionada e pagar
-    navigate("/payment");
-  };
-
   const userName = detail?.user_name || state?.userName || "Usuário";
 
   return (

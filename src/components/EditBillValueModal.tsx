@@ -27,8 +27,8 @@ export function EditBillValueModal({
 
   useEffect(() => {
     if (isOpen) {
-      // Converter o valor atual (que vem como string) para número
-      const currentValue = parseFloat(bill.value) || 0;
+      // bill.value já é um número
+      const currentValue = bill.value || 0;
       setValue(currentValue.toString());
       setError("");
       setSuccess(false);
@@ -102,7 +102,7 @@ export function EditBillValueModal({
             </p>
             <p>
               <strong>Valor atual:</strong>{" "}
-              {formatCurrency(parseFloat(bill.value) || 0)}
+              {formatCurrency(bill.value || 0)}
             </p>
             {bill.installment_info && (
               <p>
