@@ -75,7 +75,20 @@ export function BillCard({ bill, month, year, onBillDeleted }: BillCardProps) {
       </div>
 
       <div className="bill-footer">
-        <div className="bill-amount">{formatCurrency(bill.user_value)}</div>
+        <div className="bill-amounts">
+          <div className="bill-amount-full">
+            <span className="bill-label-small">Valor total:</span>
+            <span className="bill-value-full">
+              {formatCurrency(bill.value)}
+            </span>
+          </div>
+          <div className="bill-amount-user">
+            <span className="bill-label-small">Sua parte:</span>
+            <span className="bill-value-user">
+              {formatCurrency(bill.user_value)}
+            </span>
+          </div>
+        </div>
         <div className="bill-actions">
           <div className="bill-type">{bill.type}</div>
           <div className="bill-buttons">

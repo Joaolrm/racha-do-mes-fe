@@ -20,7 +20,7 @@ export function PaymentPage() {
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    payment_value: state?.bill.user_value.toString() || "",
+    payment_value: state?.bill.value.toString() || "",
     payed_at: new Date().toISOString().split("T")[0],
     receipt_photo: null as File | null,
   });
@@ -34,7 +34,7 @@ export function PaymentPage() {
     }
 
     setFormData({
-      payment_value: state.bill.user_value.toString(),
+      payment_value: state.bill.value.toString(),
       payed_at: new Date().toISOString().split("T")[0],
       receipt_photo: null,
     });
@@ -161,7 +161,13 @@ export function PaymentPage() {
           <h3>{state.bill.descript}</h3>
           <div className="bill-summary-info">
             <p>
-              <strong>Valor:</strong> {formatCurrency(state.bill.user_value)}
+              <strong>Valor total da conta:</strong>{" "}
+              {formatCurrency(state.bill.value)}
+            </p>
+            <p>
+              <strong>Sua parte:</strong>{" "}
+              {formatCurrency(state.bill.user_value)} (
+              {state.bill.share_percentage}%)
             </p>
             <p>
               <strong>Vencimento:</strong>{" "}

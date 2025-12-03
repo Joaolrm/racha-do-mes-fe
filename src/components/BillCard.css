@@ -87,6 +87,36 @@
   color: #1f2937;
 }
 
+.bill-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bill-amount-full,
+.bill-amount-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bill-label-small {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.bill-value-full {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.bill-value-user {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #059669;
+}
+
 .bill-actions {
   display: flex;
   align-items: center;

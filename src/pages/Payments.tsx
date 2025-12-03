@@ -61,7 +61,7 @@ export function Payments() {
           setFormData((prev) => ({
             ...prev,
             bill_id: state.billId!.toString(),
-            payment_value: bill.user_value.toString(),
+            payment_value: bill.value.toString(),
           }));
         }
       }
@@ -86,6 +86,20 @@ export function Payments() {
     const { name, value } = e.target;
     const newValue =
       name === "month" || name === "year" ? parseInt(value) : value;
+
+    // Se selecionou uma conta, preencher automaticamente com o valor cheio
+    if (name === "bill_id" && value) {
+      const selectedBill = bills.find((b) => b.bill_id.toString() === value);
+      if (selectedBill && !isFromSpecificBill) {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: newValue,
+          payment_value: selectedBill.value.toString(),
+        }));
+        return;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
@@ -290,16 +304,21 @@ export function Payments() {
             <option value="">Selecione uma conta</option>
             {bills.map((bill) => (
               <option key={bill.bill_id} value={bill.bill_id}>
-                {bill.descript} - {formatCurrency(bill.user_value)}
-                {bill.is_paid && " (Pago)"}
+                {bill.descript} - {formatCurrency(bill.value)} (Sua parte:{" "}
+                {formatCurrency(bill.user_value)}){bill.is_paid && " (Pago)"}
               </option>
             ))}
           </select>
           {selectedBill && (
             <div className="bill-info">
               <p>
-                <strong>Valor total:</strong>{" "}
-                {formatCurrency(selectedBill.user_value)}
+                <strong>Valor total da conta:</strong>{" "}
+                {formatCurrency(selectedBill.value)}
+              </p>
+              <p>
+                <strong>Sua parte:</strong>{" "}
+                {formatCurrency(selectedBill.user_value)} (
+                {selectedBill.share_percentage}%)
               </p>
               <p>
                 <strong>Vencimento:</strong>{" "}

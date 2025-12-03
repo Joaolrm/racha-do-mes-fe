@@ -32,9 +32,9 @@ export interface MonthlyBill {
   total_installments: number | null;
   installment_info: string | null;
   due_date: string;
-  value: string;
+  value: number;
   is_paid: boolean;
-  share_percentage: string;
+  share_percentage: number;
   user_value: number;
   bill_value_id?: number;
 }

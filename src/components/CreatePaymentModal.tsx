@@ -25,7 +25,7 @@ export function CreatePaymentModal({
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    payment_value: bill.user_value.toString(),
+    payment_value: bill.value.toString(),
     payed_at: new Date().toISOString().split("T")[0],
     receipt_photo: null as File | null,
   });
@@ -36,7 +36,7 @@ export function CreatePaymentModal({
     if (isOpen) {
       // Reset form when modal opens
       setFormData({
-        payment_value: bill.user_value.toString(),
+        payment_value: bill.value.toString(),
         payed_at: new Date().toISOString().split("T")[0],
         receipt_photo: null,
       });
@@ -44,7 +44,7 @@ export function CreatePaymentModal({
       setError("");
       setSuccess(false);
     }
-  }, [isOpen, bill.user_value]);
+  }, [isOpen, bill.value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -152,7 +152,7 @@ export function CreatePaymentModal({
 
   const handleClose = () => {
     setFormData({
-      payment_value: bill.user_value.toString(),
+      payment_value: bill.value.toString(),
       payed_at: new Date().toISOString().split("T")[0],
       receipt_photo: null,
     });
@@ -178,7 +178,12 @@ export function CreatePaymentModal({
           <h3>{bill.descript}</h3>
           <div className="bill-summary-info">
             <p>
-              <strong>Valor:</strong> {formatCurrency(bill.user_value)}
+              <strong>Valor total da conta:</strong>{" "}
+              {formatCurrency(bill.value)}
+            </p>
+            <p>
+              <strong>Sua parte:</strong> {formatCurrency(bill.user_value)} (
+              {bill.share_percentage}%)
             </p>
             <p>
               <strong>Vencimento:</strong>{" "}
