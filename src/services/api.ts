@@ -161,7 +161,7 @@ class ApiService {
 
     // Interceptor para adicionar o token em todas as requisições
     this.axiosInstance.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
         const token = this.getToken();
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -172,13 +172,13 @@ class ApiService {
 
     // Interceptor para tratar erros
     this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse) => response,
-      (error: AxiosError<{ message?: string }>) => {
+      (response: AxiosResponse): AxiosResponse => response,
+      (error: AxiosError<{ message?: string }>): Promise<never> => {
         const errorMessage =
           error.response?.data?.message ||
           error.message ||
           `Erro ${error.response?.status || "desconhecido"}`;
-        throw new Error(errorMessage);
+        return Promise.reject(new Error(errorMessage));
       }
     );
   }
