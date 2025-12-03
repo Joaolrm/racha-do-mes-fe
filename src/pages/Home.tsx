@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { apiService, type MonthlyBill } from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
@@ -11,10 +11,12 @@ import "./Home.css";
 
 export function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
   const [bills, setBills] = useState<MonthlyBill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const prevLocationRef = useRef(location.pathname);
 
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -37,6 +39,18 @@ export function Home() {
   useEffect(() => {
     loadBills();
   }, [loadBills]);
+
+  // Recarrega quando volta de outras páginas
+  useEffect(() => {
+    if (
+      prevLocationRef.current !== "/" &&
+      location.pathname === "/" &&
+      prevLocationRef.current !== location.pathname
+    ) {
+      loadBills();
+    }
+    prevLocationRef.current = location.pathname;
+  }, [location.pathname, loadBills]);
 
   const totalValue = bills.reduce((sum, bill) => sum + bill.user_value, 0);
   const paidCount = bills.filter((bill) => bill.is_paid).length;
@@ -95,8 +109,6 @@ export function Home() {
                 month={month}
                 year={year}
                 onBillDeleted={loadBills}
-                onPaymentSuccess={loadBills}
-                onBillValueUpdated={loadBills}
               />
             ))
           )}

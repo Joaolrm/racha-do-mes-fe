@@ -5,6 +5,8 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Home } from "./pages/Home";
 import { CreateBill } from "./pages/CreateBill";
+import { PaymentPage } from "./pages/PaymentPage";
+import { EditBillValuePage } from "./pages/EditBillValuePage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function AppRoutes() {
@@ -33,6 +35,22 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <CreateBill />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/payment"
+        element={
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-bill-value"
+        element={
+          <ProtectedRoute>
+            <EditBillValuePage />
           </ProtectedRoute>
         }
       />

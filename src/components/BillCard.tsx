@@ -1,8 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { type MonthlyBill, apiService } from "../services/api";
 import { formatCurrency, formatDate } from "../utils/formatters";
-import { CreatePaymentModal } from "./CreatePaymentModal";
-import { EditBillValueModal } from "./EditBillValueModal";
 import "./BillCard.css";
 
 interface BillCardProps {
@@ -10,22 +9,12 @@ interface BillCardProps {
   month: number;
   year: number;
   onBillDeleted?: () => void;
-  onPaymentSuccess?: () => void;
-  onBillValueUpdated?: () => void;
 }
 
-export function BillCard({
-  bill,
-  month,
-  year,
-  onBillDeleted,
-  onPaymentSuccess,
-  onBillValueUpdated,
-}: BillCardProps) {
+export function BillCard({ bill, month, year, onBillDeleted }: BillCardProps) {
+  const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [isEditValueModalOpen, setIsEditValueModalOpen] = useState(false);
 
   const handleDelete = async () => {
     const isRecurring = bill.type === "recorrente";
@@ -92,7 +81,11 @@ export function BillCard({
           <div className="bill-buttons">
             {!bill.is_paid && (
               <button
-                onClick={() => setIsPaymentModalOpen(true)}
+                onClick={() =>
+                  navigate("/payment", {
+                    state: { bill, month, year },
+                  })
+                }
                 className="pay-button"
               >
                 <svg
@@ -112,7 +105,11 @@ export function BillCard({
               </button>
             )}
             <button
-              onClick={() => setIsEditValueModalOpen(true)}
+              onClick={() =>
+                navigate("/edit-bill-value", {
+                  state: { bill, month, year },
+                })
+              }
               className="edit-button"
               title="Editar valor (apenas o dono pode editar)"
             >
@@ -159,32 +156,6 @@ export function BillCard({
           </div>
         </div>
       </div>
-
-      <CreatePaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        onSuccess={() => {
-          if (onPaymentSuccess) {
-            onPaymentSuccess();
-          }
-        }}
-        bill={bill}
-        month={month}
-        year={year}
-      />
-
-      <EditBillValueModal
-        isOpen={isEditValueModalOpen}
-        onClose={() => setIsEditValueModalOpen(false)}
-        onSuccess={() => {
-          if (onBillValueUpdated) {
-            onBillValueUpdated();
-          }
-        }}
-        bill={bill}
-        month={month}
-        year={year}
-      />
     </div>
   );
 }
