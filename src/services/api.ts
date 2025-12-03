@@ -1,4 +1,10 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+  type AxiosError,
+} from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -154,18 +160,20 @@ class ApiService {
     });
 
     // Interceptor para adicionar o token em todas as requisições
-    this.axiosInstance.interceptors.request.use((config) => {
-      const token = this.getToken();
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    this.axiosInstance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        const token = this.getToken();
+        if (token && config.headers) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
       }
-      return config;
-    });
+    );
 
     // Interceptor para tratar erros
     this.axiosInstance.interceptors.response.use(
-      (response) => response,
-      (error) => {
+      (response: AxiosResponse) => response,
+      (error: AxiosError<{ message?: string }>) => {
         const errorMessage =
           error.response?.data?.message ||
           error.message ||
