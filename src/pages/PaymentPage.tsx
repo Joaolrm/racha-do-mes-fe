@@ -132,7 +132,9 @@ export function PaymentPage() {
       setSuccess(true);
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/", {
+          state: { month: state.month, year: state.year },
+        });
       }, 1500);
     } catch (err) {
       setError(
@@ -150,7 +152,14 @@ export function PaymentPage() {
   return (
     <div className="payment-page">
       <header className="payment-page-header">
-        <button className="back-button" onClick={() => navigate("/")}>
+        <button
+          className="back-button"
+          onClick={() =>
+            navigate("/", {
+              state: { month: state.month, year: state.year },
+            })
+          }
+        >
           ← Voltar
         </button>
         <h1>Registrar Pagamento</h1>
@@ -255,7 +264,11 @@ export function PaymentPage() {
           <div className="form-actions">
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() =>
+                navigate("/", {
+                  state: { month: state.month, year: state.year },
+                })
+              }
               className="cancel-button"
               disabled={submitting}
             >

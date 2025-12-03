@@ -26,7 +26,7 @@ export function EditBillValuePage() {
       return;
     }
 
-    const currentValue = parseFloat(state.bill.value) || 0;
+    const currentValue = state.bill.value || 0;
     setValue(currentValue.toString());
   }, [state, navigate]);
 
@@ -61,7 +61,9 @@ export function EditBillValuePage() {
       setSuccess(true);
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/", {
+          state: { month: state.month, year: state.year },
+        });
       }, 1500);
     } catch (err) {
       setError(
@@ -81,7 +83,14 @@ export function EditBillValuePage() {
   return (
     <div className="edit-bill-value-page">
       <header className="edit-bill-value-header">
-        <button className="back-button" onClick={() => navigate("/")}>
+        <button
+          className="back-button"
+          onClick={() =>
+            navigate("/", {
+              state: { month: state.month, year: state.year },
+            })
+          }
+        >
           ← Voltar
         </button>
         <h1>Editar Valor da Conta</h1>
@@ -103,7 +112,7 @@ export function EditBillValuePage() {
             </p>
             <p>
               <strong>Valor atual:</strong>{" "}
-              {formatCurrency(parseFloat(state.bill.value) || 0)}
+              {formatCurrency(state.bill.value || 0)}
             </p>
             {state.bill.installment_info && (
               <p>
@@ -143,7 +152,11 @@ export function EditBillValuePage() {
           <div className="form-actions">
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() =>
+                navigate("/", {
+                  state: { month: state.month, year: state.year },
+                })
+              }
               className="cancel-button"
               disabled={loading}
             >

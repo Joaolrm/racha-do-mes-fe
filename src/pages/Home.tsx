@@ -9,6 +9,11 @@ import { InvitesDropdown } from "../components/InvitesDropdown";
 import { formatCurrency } from "../utils/formatters";
 import "./Home.css";
 
+interface LocationState {
+  month?: number;
+  year?: number;
+}
+
 export function Home() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,8 +24,11 @@ export function Home() {
   const prevLocationRef = useRef(location.pathname);
 
   const now = new Date();
-  const [month, setMonth] = useState(now.getMonth() + 1);
-  const [year, setYear] = useState(now.getFullYear());
+  const locationState = location.state as LocationState | null;
+  const [month, setMonth] = useState(
+    locationState?.month || now.getMonth() + 1
+  );
+  const [year, setYear] = useState(locationState?.year || now.getFullYear());
 
   const loadBills = useCallback(async () => {
     setLoading(true);
@@ -39,6 +47,15 @@ export function Home() {
   useEffect(() => {
     loadBills();
   }, [loadBills]);
+
+  // Atualiza mês/ano quando volta de outras páginas
+  useEffect(() => {
+    const state = location.state as LocationState | null;
+    if (state?.month && state?.year) {
+      setMonth(state.month);
+      setYear(state.year);
+    }
+  }, [location.state]);
 
   // Recarrega quando volta de outras páginas
   useEffect(() => {
