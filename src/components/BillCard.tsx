@@ -2,6 +2,7 @@ import { useState } from "react";
 import { type MonthlyBill, apiService } from "../services/api";
 import { formatCurrency, formatDate } from "../utils/formatters";
 import { CreatePaymentModal } from "./CreatePaymentModal";
+import { EditBillValueModal } from "./EditBillValueModal";
 import "./BillCard.css";
 
 interface BillCardProps {
@@ -10,6 +11,7 @@ interface BillCardProps {
   year: number;
   onBillDeleted?: () => void;
   onPaymentSuccess?: () => void;
+  onBillValueUpdated?: () => void;
 }
 
 export function BillCard({
@@ -18,10 +20,12 @@ export function BillCard({
   year,
   onBillDeleted,
   onPaymentSuccess,
+  onBillValueUpdated,
 }: BillCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isEditValueModalOpen, setIsEditValueModalOpen] = useState(false);
 
   const handleDelete = async () => {
     const isRecurring = bill.type === "recorrente";
@@ -108,6 +112,25 @@ export function BillCard({
               </button>
             )}
             <button
+              onClick={() => setIsEditValueModalOpen(true)}
+              className="edit-button"
+              title="Editar valor (apenas o dono pode editar)"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 13l-4 1 1-4 7.5-7.5z"></path>
+              </svg>
+            </button>
+            <button
               onClick={handleDelete}
               disabled={isDeleting}
               className="delete-button"
@@ -143,6 +166,19 @@ export function BillCard({
         onSuccess={() => {
           if (onPaymentSuccess) {
             onPaymentSuccess();
+          }
+        }}
+        bill={bill}
+        month={month}
+        year={year}
+      />
+
+      <EditBillValueModal
+        isOpen={isEditValueModalOpen}
+        onClose={() => setIsEditValueModalOpen(false)}
+        onSuccess={() => {
+          if (onBillValueUpdated) {
+            onBillValueUpdated();
           }
         }}
         bill={bill}

@@ -96,6 +96,7 @@ export function Home() {
                 year={year}
                 onBillDeleted={loadBills}
                 onPaymentSuccess={loadBills}
+                onBillValueUpdated={loadBills}
               />
             ))
           )}

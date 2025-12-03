@@ -47,6 +47,10 @@ export interface BillValue {
   value: number;
 }
 
+export interface UpdateBillValueDto {
+  value: number;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -224,6 +228,18 @@ class ApiService {
     return this.request<BillValue[]>(
       `/bills/${billId}/values${query ? `?${query}` : ""}`
     );
+  }
+
+  async updateBillValue(
+    billId: number,
+    month: number,
+    year: number,
+    data: UpdateBillValueDto
+  ): Promise<void> {
+    return this.request<void>(`/bills/${billId}/values/${month}/${year}`, {
+      method: "PATCH",
+      data,
+    });
   }
 
   async createPayment(data: CreatePaymentDto): Promise<void> {
