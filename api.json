@@ -546,7 +546,7 @@
     },
     "/bills/{billId}/values/{month}/{year}": {
       "patch": {
-        "description": "Permite atualizar o valor de uma conta em um mês/ano específico. Apenas o dono pode atualizar.",
+        "description": "Permite atualizar o valor de uma conta em um mês/ano específico. Se o bill-value não existir, ele será criado automaticamente. Apenas o dono pode atualizar.",
         "operationId": "BillsController_updateBillValue",
         "parameters": [
           {
@@ -586,13 +586,13 @@
         },
         "responses": {
           "200": {
-            "description": "Valor da conta atualizado com sucesso"
+            "description": "Valor da conta atualizado ou criado com sucesso"
           },
           "403": {
             "description": "Apenas o dono da conta pode atualizar os valores"
           },
           "404": {
-            "description": "Conta ou valor não encontrado"
+            "description": "Conta não encontrada"
           }
         },
         "security": [
@@ -600,7 +600,7 @@
             "bearer": []
           }
         ],
-        "summary": "Atualizar valor da conta para um mês específico",
+        "summary": "Atualizar ou criar valor da conta para um mês específico",
         "tags": ["Contas"]
       }
     },
@@ -1049,6 +1049,140 @@
           }
         ],
         "summary": "Gerar mensagem de cobrança para um usuário",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/me/debts": {
+      "get": {
+        "description": "Retorna lista de pessoas para quem o usuário autenticado deve dinheiro, com o valor total de cada dívida",
+        "operationId": "BalanceController_getMyDebts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de pessoas que você deve",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DebtSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar pessoas que eu devo",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/me/debts/{creditorId}": {
+      "get": {
+        "description": "Retorna detalhamento completo da dívida do usuário autenticado com uma pessoa específica, incluindo histórico de transações",
+        "operationId": "BalanceController_getMyDebtDetail",
+        "parameters": [
+          {
+            "name": "creditorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhamento da dívida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebtDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado ou dívida não existe"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Detalhar dívida com uma pessoa específica",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/me/credits": {
+      "get": {
+        "description": "Retorna lista de pessoas que devem dinheiro ao usuário autenticado, com o valor total de cada crédito",
+        "operationId": "BalanceController_getMyCredits",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de pessoas que te devem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreditSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar pessoas que me devem",
+        "tags": ["Saldos e Histórico"]
+      }
+    },
+    "/balance/me/credits/{debtorId}": {
+      "get": {
+        "description": "Retorna detalhamento completo do que uma pessoa específica deve ao usuário autenticado, incluindo histórico de transações",
+        "operationId": "BalanceController_getMyCreditDetail",
+        "parameters": [
+          {
+            "name": "debtorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhamento do crédito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebtDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado ou dívida não existe"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Detalhar o que uma pessoa me deve",
         "tags": ["Saldos e Histórico"]
       }
     }
@@ -1504,6 +1638,109 @@
           "value",
           "created_at"
         ]
+      },
+      "DebtSummaryDto": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "number",
+            "description": "ID do usuário para quem você deve",
+            "example": 2
+          },
+          "user_name": {
+            "type": "string",
+            "description": "Nome do usuário para quem você deve",
+            "example": "Maria Santos"
+          },
+          "total_value": {
+            "type": "number",
+            "description": "Valor total que você deve para esta pessoa",
+            "example": 750
+          }
+        },
+        "required": ["user_id", "user_name", "total_value"]
+      },
+      "DebtDetailItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID do histórico",
+            "example": 1
+          },
+          "bill_id": {
+            "type": "number",
+            "description": "ID da conta relacionada",
+            "example": 5,
+            "nullable": true
+          },
+          "descript": {
+            "type": "string",
+            "description": "Descrição da transação",
+            "example": "Pagamento de Aluguel (10/2025)"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor da transação",
+            "example": 250
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Data da transação",
+            "example": "2025-10-15T10:30:00.000Z"
+          }
+        },
+        "required": ["id", "bill_id", "descript", "value", "created_at"]
+      },
+      "DebtDetailDto": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "number",
+            "description": "ID do outro usuário",
+            "example": 2
+          },
+          "user_name": {
+            "type": "string",
+            "description": "Nome do outro usuário",
+            "example": "Maria Santos"
+          },
+          "total_value": {
+            "type": "number",
+            "description": "Valor total da dívida",
+            "example": 750
+          },
+          "history": {
+            "description": "Histórico detalhado das transações",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DebtDetailItemDto"
+            }
+          }
+        },
+        "required": ["user_id", "user_name", "total_value", "history"]
+      },
+      "CreditSummaryDto": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "number",
+            "description": "ID do usuário que te deve",
+            "example": 3
+          },
+          "user_name": {
+            "type": "string",
+            "description": "Nome do usuário que te deve",
+            "example": "João da Silva"
+          },
+          "total_value": {
+            "type": "number",
+            "description": "Valor total que esta pessoa te deve",
+            "example": 500
+          }
+        },
+        "required": ["user_id", "user_name", "total_value"]
       }
     }
   }

@@ -110,6 +110,37 @@ export interface Payment {
   updated_at: string;
 }
 
+export interface DebtSummary {
+  user_id: number;
+  user_name: string;
+  total_value: number;
+}
+
+export interface CreditSummary {
+  user_id: number;
+  user_name: string;
+  total_value: number;
+}
+
+export interface DebtDetailItem {
+  id: number;
+  bill_id: number | null;
+  descript: string;
+  value: number;
+  created_at: Date;
+}
+
+export interface DebtDetail {
+  user_id: number;
+  user_name: string;
+  total_value: number;
+  history: DebtDetailItem[];
+}
+
+export interface ChargeMessageResponse {
+  message: string;
+}
+
 class ApiService {
   private axiosInstance: AxiosInstance;
 
@@ -282,6 +313,43 @@ class ApiService {
     return this.request<void>(`/bills/${billId}`, {
       method: "DELETE",
     });
+  }
+
+  // Balance endpoints
+  async getMyCredits(): Promise<CreditSummary[]> {
+    return this.request<CreditSummary[]>("/balance/me/credits");
+  }
+
+  async getMyCreditDetail(debtorId: number): Promise<DebtDetail> {
+    return this.request<DebtDetail>(`/balance/me/credits/${debtorId}`);
+  }
+
+  async getMyDebts(): Promise<DebtSummary[]> {
+    return this.request<DebtSummary[]>("/balance/me/debts");
+  }
+
+  async getMyDebtDetail(creditorId: number): Promise<DebtDetail> {
+    return this.request<DebtDetail>(`/balance/me/debts/${creditorId}`);
+  }
+
+  async getChargeMessage(userId?: number): Promise<ChargeMessageResponse> {
+    const endpoint = userId
+      ? `/balance/charge-message/${userId}`
+      : "/balance/charge-message/me";
+    return this.request<ChargeMessageResponse>(endpoint);
+  }
+
+  async confirmPayment(
+    debtorId: number,
+    paymentValue?: number
+  ): Promise<{ message: string }> {
+    return this.request<{ message: string }>(
+      `/balance/me/credits/${debtorId}/confirm-payment`,
+      {
+        method: "POST",
+        data: paymentValue ? { payment_value: paymentValue } : {},
+      }
+    );
   }
 }
 

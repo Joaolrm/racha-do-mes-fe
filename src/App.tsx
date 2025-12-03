@@ -7,6 +7,10 @@ import { Home } from "./pages/Home";
 import { CreateBill } from "./pages/CreateBill";
 import { PaymentPage } from "./pages/PaymentPage";
 import { EditBillValuePage } from "./pages/EditBillValuePage";
+import { CreditsPage } from "./pages/CreditsPage";
+import { CreditDetailPage } from "./pages/CreditDetailPage";
+import { DebtsPage } from "./pages/DebtsPage";
+import { DebtDetailPage } from "./pages/DebtDetailPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function AppRoutes() {
@@ -51,6 +55,38 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <EditBillValuePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/credits"
+        element={
+          <ProtectedRoute>
+            <CreditsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/credits/:debtorId"
+        element={
+          <ProtectedRoute>
+            <CreditDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/debts"
+        element={
+          <ProtectedRoute>
+            <DebtsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/debts/:creditorId"
+        element={
+          <ProtectedRoute>
+            <DebtDetailPage />
           </ProtectedRoute>
         }
       />

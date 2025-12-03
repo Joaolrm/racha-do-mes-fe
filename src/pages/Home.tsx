@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { apiService, type MonthlyBill } from "../services/api";
+import {
+  apiService,
+  type MonthlyBill,
+  type DebtSummary,
+} from "../services/api";
 import { MonthSelector } from "../components/MonthSelector";
 import { BillCard } from "../components/BillCard";
 import { SummaryCard } from "../components/SummaryCard";
@@ -19,6 +23,7 @@ export function Home() {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [bills, setBills] = useState<MonthlyBill[]>([]);
+  const [debts, setDebts] = useState<DebtSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const prevLocationRef = useRef(location.pathname);
@@ -46,7 +51,18 @@ export function Home() {
 
   useEffect(() => {
     loadBills();
+    loadDebts();
   }, [loadBills]);
+
+  const loadDebts = useCallback(async () => {
+    try {
+      const data = await apiService.getMyDebts();
+      setDebts(data);
+    } catch (err) {
+      // Silenciar erro de dívidas para não interferir na experiência
+      console.error("Erro ao carregar dívidas:", err);
+    }
+  }, []);
 
   // Atualiza mês/ano quando volta de outras páginas
   useEffect(() => {
@@ -106,6 +122,63 @@ export function Home() {
         <SummaryCard label="Total do Mês" value={formatCurrency(totalValue)} />
         <SummaryCard label="Pendentes" value={unpaidCount} variant="unpaid" />
         <SummaryCard label="Pagas" value={paidCount} variant="paid" />
+      </div>
+
+      {debts.length > 0 && (
+        <div className="debts-notification">
+          <div className="debts-notification-content">
+            <span className="debts-notification-icon">🔔</span>
+            <div className="debts-notification-text">
+              <strong>
+                Você possui {debts.length} dívida{debts.length > 1 ? "s" : ""}{" "}
+                pendente{debts.length > 1 ? "s" : ""}
+              </strong>
+              <span className="debts-notification-value">
+                Total:{" "}
+                {formatCurrency(
+                  debts.reduce((sum, d) => sum + d.total_value, 0)
+                )}
+              </span>
+            </div>
+            <button
+              className="debts-notification-button"
+              onClick={() => navigate("/debts")}
+            >
+              Ver
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="navigation-cards">
+        <div
+          className="nav-card nav-card-credits"
+          onClick={() => navigate("/credits")}
+        >
+          <div className="nav-card-icon">💰</div>
+          <div className="nav-card-content">
+            <div className="nav-card-title">Me Deve</div>
+            <div className="nav-card-subtitle">Ver quem me deve</div>
+          </div>
+          <div className="nav-card-arrow">›</div>
+        </div>
+        <div
+          className="nav-card nav-card-debts"
+          onClick={() => navigate("/debts")}
+        >
+          <div className="nav-card-icon">📝</div>
+          <div className="nav-card-content">
+            <div className="nav-card-title">Eu Devo</div>
+            <div className="nav-card-subtitle">
+              {debts.length > 0
+                ? `${debts.length} dívida${
+                    debts.length > 1 ? "s" : ""
+                  } pendente${debts.length > 1 ? "s" : ""}`
+                : "Ver minhas dívidas"}
+            </div>
+          </div>
+          <div className="nav-card-arrow">›</div>
+        </div>
       </div>
 
       {loading && <div className="loading">Carregando contas...</div>}

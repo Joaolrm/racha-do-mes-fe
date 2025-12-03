@@ -99,3 +99,135 @@
   border-radius: 12px;
   margin: 1rem;
 }
+
+.debts-notification {
+  margin: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fbbf24;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(251, 191, 36, 0.2);
+}
+
+.debts-notification-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.debts-notification-icon {
+  font-size: 1.5rem;
+}
+
+.debts-notification-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.debts-notification-text strong {
+  color: #92400e;
+  font-size: 0.95rem;
+}
+
+.debts-notification-value {
+  color: #78350f;
+  font-size: 0.85rem;
+}
+
+.debts-notification-button {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.debts-notification-button:hover {
+  background: #d97706;
+}
+
+.navigation-cards {
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.nav-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-card:active {
+  transform: scale(0.98);
+}
+
+.nav-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-card-icon {
+  font-size: 2rem;
+}
+
+.nav-card-content {
+  flex: 1;
+}
+
+.nav-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.nav-card-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.nav-card-arrow {
+  font-size: 1.5rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 480px) {
+  .debts-notification-content {
+    flex-wrap: wrap;
+  }
+
+  .debts-notification-button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .nav-card {
+    padding: 1rem;
+  }
+
+  .nav-card-icon {
+    font-size: 1.5rem;
+  }
+
+  .nav-card-title {
+    font-size: 1rem;
+  }
+
+  .nav-card-subtitle {
+    font-size: 0.8rem;
+  }
+}
